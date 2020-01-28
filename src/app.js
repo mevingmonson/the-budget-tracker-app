@@ -1,5 +1,55 @@
 // Budget Controller
-var BudgetController = (function () {
+var budgetController = (function () {
+
+    var Expense = function (id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    }
+
+    var Income = function (id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    }
+
+    var data = {
+        allItems: {
+            exp: [],
+            inc: []
+        },
+        totals: {
+            exp: 0,
+            inc: 0
+        }
+    };
+
+    return {
+        addItem: function (type, des, val) {
+            var newItem, ID;
+            //creating ID
+            if (data.allItems[type].length > 0) {
+                ID = data.allItems[type][data.allItems[type].length - 1].id + 1;
+            }
+            else {
+                ID = 0;
+            }
+
+            //creating new item based on income or expense
+            if (type === 'exp') {
+                newItem = new Expense(ID, des, val);
+            }
+            else {
+                newItem = new Income(ID, des, val);
+            }
+
+            data.allItems[type].push(newItem);
+            return newItem;
+        },
+        testing: function () {
+            console.log(data);
+        }
+    }
 
 
 })();
@@ -18,7 +68,7 @@ var UIController = (function () {
             return {
                 type: document.querySelector(DOMstrings.inputType).value,
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                add__value: document.querySelector(DOMstrings.inputValue).value
+                value: document.querySelector(DOMstrings.inputValue).value
             };
         },
         getDOMstrings: function () {
@@ -31,7 +81,7 @@ var UIController = (function () {
 
 
 // Global App Controller
-var Controller = (function (budgetCtrl, UICtrl) {
+var controller = (function (budgetCtrl, UICtrl) {
 
     //Setting up event handlers
     var setupEventListeners = function () {
@@ -46,27 +96,26 @@ var Controller = (function (budgetCtrl, UICtrl) {
 
     //Get the field input data
     var ctrlAddItem = function () {
-        var input = UICtrl.getInput();
-        console.log(input);
-        console.log('it works');
+        var input, newItem;
+        input = UICtrl.getInput();
+
+        //add the item to the budet controller
+        newItem = budgetController.addItem(input.type, input.description, input.value);
+
+        //add the item to the UI
+
+
+        //calculate the budget
+
+
+        //displat the budget on the UI
     };
-    //add the item to the budet controller
-
-
-    //add the item to the UI
-
-
-    //calculate the budget
-
-
-    //displat the budget on the UI
-
     return {
         init: function () {
             setupEventListeners();
         }
     }
 
-})(BudgetController, UIController);
+})(budgetController, UIController);
 
-Controller.init()
+controller.init()
