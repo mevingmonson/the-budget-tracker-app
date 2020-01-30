@@ -105,7 +105,8 @@ var UIController = (function () {
         budgetLabel: '.budget__value',
         incomeLabel: '.budget__income--value',
         expenseLabel: '.budget__expenses--value',
-        percentageLabel: '.budget__expenses--percentage'
+        percentageLabel: '.budget__expenses--percentage',
+        container: '.container'
     };
     return {
         getInput: function () {
@@ -188,6 +189,7 @@ var controller = (function (budgetCtrl, UICtrl) {
                 ctrlAddItem();
             }
         });
+        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
     };
 
     var updateBudget = function () {
@@ -201,7 +203,7 @@ var controller = (function (budgetCtrl, UICtrl) {
 
         // 3 Display the budget to the UI
         UICtrl.displayBudget(budget);
-    }
+    };
 
     //Get the field input data
     var ctrlAddItem = function () {
@@ -225,8 +227,29 @@ var controller = (function (budgetCtrl, UICtrl) {
 
             //display the budget on the UI
         }
-
     };
+
+    var ctrlDeleteItem = function (event) {
+        var itemID, splitID, ID, type;
+        console.log(event.target);
+
+        itemID = event.target.parentNode.parentNode.parentNode.parentNode.id
+
+        if (itemID) {
+            splitID = itemID.split('-');
+            type = splitID[0];
+            ID = parseInt(splitID[1]);
+        }
+
+        //delete the item from the data structure
+
+        //delete item from the ui
+
+        //update and show the new budget
+
+        //calculate and update the new budget
+    };
+
     return {
         init: function () {
             setupEventListeners();
