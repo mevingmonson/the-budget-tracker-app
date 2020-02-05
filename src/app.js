@@ -165,6 +165,12 @@ var UIController = (function () {
         return (type === 'exp' ? '-' : '+') + int + '.' + dec;
     };
 
+    var nodeListForEachfunction = function (fieldSet, callback) {
+        for (var i = 0; i < fieldSet.length; i++) {
+            callback(fieldSet[i], i);
+        }
+    };
+
     return {
         getInput: function () {
             return {
@@ -238,15 +244,9 @@ var UIController = (function () {
 
             var fields = document.querySelectorAll(DOMstrings.expPercentLabel);
 
-            var nodeListForEachfunction = function (fieldSet, callback) {
-                for (var i = 0; i < fieldSet.length; i++) {
-                    callback(fieldSet[i], percentages[i]);
-                }
-            }
-
-            nodeListForEachfunction(fields, function (current, perc) {
-                if (perc > 0) {
-                    current.textContent = perc + '%';
+            nodeListForEachfunction(fields, function (current, index) {
+                if (percentages[index] > 0) {
+                    current.textContent = percentages[index] + '%';
                 }
                 else {
                     current.textContent = '--';
@@ -261,6 +261,17 @@ var UIController = (function () {
             year = date.getFullYear();
             months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             document.querySelector(DOMstrings.monthLabel).textContent = months[month] + ' ' + year;
+        },
+
+        changeColor: function () {
+            var fields = document.querySelectorAll(DOMstrings.inputType + ',' + DOMstrings.inputDescription + ',' + DOMstrings.inputValue);
+
+            nodeListForEachfunction(fields, function (current) {
+                current.classList.toggle('red-focus');
+            });
+
+            document.querySelector(DOMstrings.inputButton).classList.toggle('red');
+
         },
 
         getDOMstrings: function () {
@@ -285,6 +296,7 @@ var controller = (function (budgetCtrl, UICtrl) {
             }
         });
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeColor);
     };
 
     var updateBudget = function () {
